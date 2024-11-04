@@ -1,0 +1,51 @@
+hello="C:/Users/ashok/Documents/Research/9-20 F480+MPO Male 16 wk/660 C 1 F480+MPO 2 block/20x_660_F480+MPO_01/Image_Overlay.tif"
+
+start = indexOf(hello, "20x");
+end = indexOf(hello, "_01");
+getend=(end + 2 - start);
+index = indexOf(hello, "20x") + getend;
+currentnumber = parseInt(substring(hello, index, index + 1));
+
+x = indexOf(hello, "01", indexOf(hello, "20x"));
+substringfor10 = substring(hello, 0, x);
+
+
+y = (indexOf(hello, "01", indexOf(hello, "20x"))+1);
+substringforelse = substring(hello, 0, y);
+
+end="/Image_Overlay.tif"
+
+function runJaCop(){
+	open(hello);
+    run("Split Channels");
+    selectImage("Image_Overlay.tif (blue)");
+    close();
+    
+    run("JACoP ", "imga=[Image_Overlay.tif (green)] imgb=[Image_Overlay.tif (red)] thra=75 thrb=55 pearson mm");
+    selectImage("Image_Overlay.tif (green)");
+    close();
+    selectImage("Image_Overlay.tif (red)");
+    close();	
+}
+while (currentnumber < 11) {
+    if (currentnumber == 1) {
+    runJaCop();
+    }
+    
+    currentnumber = currentnumber + 1;
+    
+    // Convert current number to string
+    scurrentnumber = "" + currentnumber;
+    
+    // Update file path depending on current number
+    if (currentnumber == 10) {
+        hello = substringfor10 + scurrentnumber + end;
+    runJaCop();
+    } 
+    
+    else {
+        hello = substringforelse + scurrentnumber + end; 
+    runJaCop();
+    }
+}
+
